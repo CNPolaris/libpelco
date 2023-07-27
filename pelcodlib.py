@@ -10,7 +10,7 @@ class PELCO_Functions():
         return "This is Pelco D Ptz control lib"
 
     def _construct_cmd(self,
-                       address='01',
+                       address=1,
                        cmd_1='00',
                        cmd_2='00',
                        pan_speed='00',
@@ -19,8 +19,8 @@ class PELCO_Functions():
 
         Parameters
         ----------
-        address : str, optional
-            设备地址 16进制字符, by default '01'
+        address : int, optional
+            设备地址 0~255, by default 1
         cmd_1 : str, optional
             指令1 16进制字符, by default '00'
         cmd_2 : str, optional
@@ -35,7 +35,7 @@ class PELCO_Functions():
         cmd : bytes
             生成最终的控制命令
         """
-        self.pelco_struct._frame['address'] = address
+        self.pelco_struct._frame['address'] = hex(address)[2:].zfill(2)
         self.pelco_struct._frame['command1'] = cmd_1
         self.pelco_struct._frame['command2'] = cmd_2
         self.pelco_struct._frame['data1'] = pan_speed
@@ -62,13 +62,13 @@ class PELCO_Functions():
             data_sum += int(i, 16)
         return hex(data_sum % 256)[2:].zfill(2)
 
-    def ptz_up(self, address='01', speed='FF'):
+    def ptz_up(self, address=1, speed='FF'):
         """控制云台上扬
 
         Parameters
         ----------
-        address : str, optional
-            设备地址 16进制, by default '01'
+        address : int, optional
+            设备地址 1 0~255, by default 1
         speed : str, optional
             移动速度 16进制 00~3F FF最高速, by default 'FF'
         
@@ -82,35 +82,35 @@ class PELCO_Functions():
                                    cmd_2=func_code,
                                    tilt_speed=speed)
 
-    def ptz_down(self, address='01', speed='FF'):
+    def ptz_down(self, address=1, speed='FF'):
         func_code = self.pelco_struct._func['DOWN']
         return self._construct_cmd(address=address,
                                    cmd_2=func_code,
                                    tilt_speed=speed)
 
-    def ptz_right(self, address='01', speed='FF'):
+    def ptz_right(self, address=1, speed='FF'):
         func_code = self.pelco_struct._func['RIGHT']
         return self._construct_cmd(address=address,
                                    cmd_2=func_code,
                                    pan_speed=speed)
 
-    def ptz_left(self, address='01', speed='FF'):
+    def ptz_left(self, address=1, speed='FF'):
         func_code = self.pelco_struct._func['LEFT']
         return self._construct_cmd(address=address,
                                    cmd_2=func_code,
                                    pan_speed=speed)
 
-    def ptz_stop(self, address='01'):
+    def ptz_stop(self, address=1):
         func_code = self.pelco_struct._func['STOP']
         return self._construct_cmd(address=address, cmd_2=func_code)
 
-    def zoom_in(self, address='01'):
+    def zoom_in(self, address=1):
         """焦距近
 
         Parameters
         ----------
-        address : str, optional
-            设备地址, by default '01'
+        address : int, optional
+            设备地址, by default 1
 
         Returns
         -------
@@ -120,13 +120,13 @@ class PELCO_Functions():
         func_code = self.pelco_struct._func['ZOOM_IN']
         return self._construct_cmd(address=address, cmd_2=func_code)
 
-    def zoom_out(self, address='01'):
+    def zoom_out(self, address=1):
         """焦距远
 
         Parameters
         ----------
-        address : str, optional
-            设备地址, by default '01'
+        address : int, optional
+            设备地址, by default 1
 
         Returns
         -------
@@ -136,13 +136,13 @@ class PELCO_Functions():
         func_code = self.pelco_struct._func['ZOOM_OUT']
         return self._construct_cmd(address=address, cmd_1=func_code)
 
-    def light_on(self, address='01'):
+    def light_on(self, address=1):
         """灯光开
 
         Parameters
         ----------
-        address : str, optional
-            设备地址, by default '01'
+        address : int, optional
+            设备地址, by default 1
 
         Returns
         -------
@@ -154,13 +154,13 @@ class PELCO_Functions():
                                    cmd_1=func_code,
                                    tilt_speed='01')
 
-    def light_off(self, address='01'):
+    def light_off(self, address=1):
         """灯光关
 
         Parameters
         ----------
-        address : str, optional
-            设备地址, by default '01'
+        address : int, optional
+            设备地址, by default 1
 
         Returns
         -------
@@ -172,13 +172,13 @@ class PELCO_Functions():
                                    cmd_1=func_code,
                                    tilt_speed='01')
 
-    def f_big(self, address='01'):
+    def f_big(self, address=1):
         """光圈大
 
         Parameters
         ----------
-        address : str, optional
-            设备地址, by default '01'
+        address : int, optional
+            设备地址, by default 1
 
         Returns
         -------
@@ -188,7 +188,7 @@ class PELCO_Functions():
         func_code = self.pelco_struct._func['F_BIG']
         return self._construct_cmd(address=address, cmd_1=func_code)
 
-    def f_litle(self, address='01'):
+    def f_litle(self, address=1):
         """光圈小
 
         Parameters
